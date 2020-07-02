@@ -4,9 +4,33 @@ const cors = require('cors');
 const app = express();
 const PORT = 8000;
 
+// MIDDLEWARE
+const jwt = require("express-jwt")
+const jwksRsa = require("jwks-rsa")
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+
+const authConfig = {
+    domain: "ariecker.us.auth0.com",
+    audience: "https://express-api"
+  };
+
+const checkJwt = jwt({
+// Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
+secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
+}),
+
+// Validate the audience (Identifier) and the issuer (Domain).
+audience: authConfig.audience,
+issuer: `https://${authConfig.domain}/`,
+algorithms: ["RS256"]
+});
 
 const elements = 
 [
@@ -41,12 +65,13 @@ const elements =
 ];
 
 app.get('/elements', (req, res) => {
+    // res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict"),
     res.send(elements);
   });
 
-app.get('/elements/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const element = elements.find(element => element.id === id);
+app.get('/elements/:id', checkJwt, (req, res) => {
+    const elid = Number(req.params.id);
+    const element = elements.find(element => element.id === elid);
     res.send(element);
 });
 
