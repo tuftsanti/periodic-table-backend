@@ -14,16 +14,18 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 // GET DATA FROM GITHUB API OR USE BACKUP FILE
-const backupElements = require('./elements.js')
+const backupElements = require('./elements-array.js')
 let elements = []
-axios.get('https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json')
+// axios.get('https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json')
+axios.get('https://neelpatel05.pythonanywhere.com/')
   .then(({data}) => {
-    elements = Object.values(data.elements)
+    // elements = Object.values(data.elements)
+    elements = data
     // console.log(elements)
     // elements = data.map(element => element)
   })
   .catch(error => {
-    console.log(`Couldn't reach the Element source API:\n`+error)
+    console.log(`Couldn't reach the element source API at Github:\n`+error)
     elements = backupElements
   })
 
@@ -56,7 +58,7 @@ app.get('/elements', (req, res) => {
 app.get('/elements/:id', /*checkJwt,*/ (req, res) => {
     const elid = Number(req.params.id);
     // console.log(elid)
-    const element = elements.find(element => element.number === elid);
+    const element = elements.find(element => element.atomicNumber === elid);
     res.send(element);
 });
 
