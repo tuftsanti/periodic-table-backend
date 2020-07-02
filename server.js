@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 const PORT = 8000;
+const axios = require('axios')
 
 // AUTH MIDDLEWARE
 // const jwt = require("express-jwt")
@@ -12,7 +13,19 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-const elements = require('./elements.js')
+// GET DATA FROM GITHUB API OR USE BACKUP FILE
+const backupElements = require('./elements.js')
+let elements = []
+axios.get('https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json')
+  .then(({data}) => {
+    elements = Object.values(data.elements)
+    // console.log(elements)
+    // elements = data.map(element => element)
+  })
+  .catch(error => {
+    console.log(`Couldn't reach the Element source API:\n`+error)
+    elements = backupElements
+  })
 
 // // AUTH CONFIG
 // const authConfig = {
@@ -35,36 +48,6 @@ const elements = require('./elements.js')
 // algorithms: ["RS256"]
 // });
 
-// const elements = 
-// [
-//   {
-//     id: 1,
-//     name: 'Charity Ball',
-//     category: 'Fundraising',
-//     description: 'Spend an elegant night of dinner and dancing with us as we raise money for our new rescue farm.',
-//     featuredImage: 'https://placekitten.com/500/500',
-//     images: [
-//       'https://placekitten.com/500/500'
-//     ],
-//     location: '1234 Fancy Ave',
-//     date: '12-25-2019',
-//     time: '11:30'
-//   },
-//   {
-//     id: 2,
-//     name: 'Rescue Center Goods Drive',
-//     category: 'Adoptions',
-//     description: 'Come to our donation drive to help us replenish our stock of pet food, toys, bedding, etc. We will have live bands, games, food trucks, and much more.',
-//     featuredImage: 'https://placekitten.com/500/500',
-//     images: [
-//       'https://placekitten.com/500/500'
-//     ],
-//     location: '1234 Dog Alley',
-//     date: '11-21-2019',
-//     time: '12:00'
-//   }
-// ];
-
 app.get('/elements', (req, res) => {
     // res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict"),
     res.send(elements);
@@ -72,7 +55,7 @@ app.get('/elements', (req, res) => {
 
 app.get('/elements/:id', /*checkJwt,*/ (req, res) => {
     const elid = Number(req.params.id);
-    console.log(elid)
+    // console.log(elid)
     const element = elements.find(element => element.number === elid);
     res.send(element);
 });
