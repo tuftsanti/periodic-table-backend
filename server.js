@@ -72,7 +72,8 @@ app.get('/elements', (req, res) => {
 
 app.get('/elements/:id', /*checkJwt,*/ (req, res) => {
     const elid = Number(req.params.id);
-    const element = elements.find(element => element.id === elid);
+    console.log(elid)
+    const element = elements.find(element => element.number === elid);
     res.send(element);
 });
 
