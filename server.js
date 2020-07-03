@@ -2,8 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const PORT = 8000;
-const axios = require('axios')
+const PORT = process.env.PORT || 8000;
+const axios = require('axios');
+const mongoose = require('mongoose')
+require('dotenv').config()
 
 // AUTH MIDDLEWARE
 // const jwt = require("express-jwt")
@@ -68,4 +70,6 @@ app.get('/', (req, res) => {
 });
 
 // listen on the port
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}...`)
+});
