@@ -58,11 +58,11 @@ let elements = []
 let forSeed = []
 // console.log(`Elements is: ${typeof(elements)}`)
 // axios.get('https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json')
-axios.get('https://neelpatel05.pythonanywhere.com/')
+axios.get('https://neelpatel05.pythonanywhere.com/xx')
   .then(({data}) => {
     // elements = Object.values(data.elements)
     elements = data
-    forSeed = JSON.stringify(elements)
+    // forSeed = JSON.stringify(elements)
     // console.log(forSeed)
     // console.log(elements, typeof(elements))
     // console.log(data)
@@ -78,6 +78,12 @@ axios.get('https://neelpatel05.pythonanywhere.com/')
   .catch(error => {
     console.log(`Couldn't reach the element source API at Github:\n`+error)
     elements = backupElements
+    db.collections['elements'].drop( function(err) {
+      console.log('elements dropped');
+    });
+    db.collections['elements'].insertMany(elements, function(err) {
+      console.log('elements added');
+    })
   })
 //// TESTING SEEDING DATABASE
 // const resetDatabase = () => {
