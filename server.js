@@ -7,13 +7,49 @@ const axios = require('axios');
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+const elementsController = require('./controllers/elements.js')
+const db = mongoose.connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/'
+
 // AUTH MIDDLEWARE
 // const jwt = require("express-jwt")
 // const jwksRsa = require("jwks-rsa")
 
-app.use(bodyParser.json());
+// Whitelist localhost
+const whitelist = [
+  'http://localhost:8080',
+  'http://localhost:8000'
+]
+
+// Object to Configure CORS middleware
+const corsOptions = {
+  origin: function (origin, callback) {
+      if (whitelist.indexOf (origin) !== -1) {
+          callback(null, true)
+      } else {
+          callback(new Error('Not allowed by CORS'))
+      }
+  }
+}
+
+////////////////
+/// DATABASE CONNECT
+////////////////
+mongoose.connect(MONGODB_URI, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useCreateIndex: true
+})
+db.on('open', ()=> {
+  console.log('Mongo is Connected')
+})
+
+// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.json())
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+app.use('/elements/', elementsController)
 
 // GET DATA FROM GITHUB API OR USE BACKUP FILE
 const backupElements = require('./elements-array.js')
@@ -66,7 +102,8 @@ app.get('/elements/:id', /*checkJwt,*/ (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.send(`Listening on port ${PORT}...`)
+  // res.send(`Listening on port ${PORT}...`)
+  res.redirect('/elements')
 });
 
 // listen on the port
