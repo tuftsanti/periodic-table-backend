@@ -1,7 +1,7 @@
 const {Schema, model} = require('mongoose')
 
 const elementSchema = new Schema({
-  element: {
+  // element: {
     atomicMass: String,
     atomicNumber: Number,
     atomicRadius: Number,
@@ -22,7 +22,7 @@ const elementSchema = new Schema({
     symbol: String,
     vanDelWaalsRadius: Number,
     yearDiscovered: Number
-  }
+  // }
 })
 
 const Element = model('element', elementSchema)

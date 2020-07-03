@@ -53,14 +53,17 @@ app.use('/elements/', elementsController)
 
 // GET DATA FROM GITHUB API OR USE BACKUP FILE
 const backupElements = require('./elements-array.js')
-let elements = []
+let elements = {}
+// console.log(`Elements is: ${typeof(elements)}`)
 // axios.get('https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json')
 axios.get('https://neelpatel05.pythonanywhere.com/')
   .then(({data}) => {
     // elements = Object.values(data.elements)
     elements = data
-    // console.log(elements)
+    // console.log(data)
+    // console.log(`Elements is: ${typeof(elements)}`)
     // elements = data.map(element => element)
+    
   })
   .catch(error => {
     console.log(`Couldn't reach the element source API at Github:\n`+error)
