@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 8000;
 const axios = require('axios');
 const mongoose = require('mongoose')
 require('dotenv').config()
+// const Element = require('./models/elements.js')
 
 const elementsController = require('./controllers/elements.js')
 const db = mongoose.connection
@@ -21,7 +22,7 @@ const whitelist = [
   'http://localhost:8000'
 ]
 
-// Object to Configure CORS middleware
+// CORS middleware
 const corsOptions = {
   origin: function (origin, callback) {
       if (whitelist.indexOf (origin) !== -1) {
@@ -53,29 +54,46 @@ app.use('/elements/', elementsController)
 
 // GET DATA FROM GITHUB API OR USE BACKUP FILE
 const backupElements = require('./elements-array.js')
-let elements = {}
+let elements = []
+let forSeed = []
 // console.log(`Elements is: ${typeof(elements)}`)
 // axios.get('https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json')
 axios.get('https://neelpatel05.pythonanywhere.com/')
   .then(({data}) => {
     // elements = Object.values(data.elements)
     elements = data
+    forSeed = JSON.stringify(elements)
+    // console.log(forSeed)
+    // console.log(elements, typeof(elements))
     // console.log(data)
     // console.log(`Elements is: ${typeof(elements)}`)
     // elements = data.map(element => element)
-    
+    db.collections['elements'].drop( function(err) {
+      console.log('elements dropped');
+    });
+    db.collections['elements'].insertMany(elements, function(err) {
+      console.log('elements added');
+    })
   })
   .catch(error => {
     console.log(`Couldn't reach the element source API at Github:\n`+error)
     elements = backupElements
   })
-
-const resetDatabase = () => {
-    mongoose.connection.collections['elements'].drop( function(err) {
-      console.log('elements dropped');
-    });
-  }
-// resetDatabase()
+//// TESTING SEEDING DATABASE
+// const resetDatabase = () => {
+//     db.collections['elements'].drop( function(err) {
+//       console.log('elements dropped');
+//     });
+//   }
+// // resetDatabase()
+// const setDatabase = () => {
+//   // console.log(typeof(forSeed))
+//   db.collections['elements'].insertMany(elements, function(err) {
+//     console.log('elements added');
+//   })
+// }
+// setDatabase()
+// console.log(elements)
 
 // // AUTH CONFIG
 // const authConfig = {
@@ -102,6 +120,20 @@ app.get('/elements', (req, res) => {
     // res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict"),
     res.send(elements);
   });
+
+// SEEDING DB
+for (item in elements) {
+app.post('/', async (req, res) => {
+  try {
+      const newElement = {...req.body}
+      // console.log(newElement)
+      const createdElement = await Element.create(newElement)
+      res.status(200).json(createdElement)
+  } catch(error) {
+      res.status(400).json(error)
+  }
+})
+}
 
 app.get('/elements/:id', /*checkJwt,*/ (req, res) => {
     const elid = Number(req.params.id);

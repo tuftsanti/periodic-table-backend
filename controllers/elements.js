@@ -6,6 +6,59 @@ const router = express.Router()
 const Element = require('../models/elements.js')
 // const jwt = require('jsonwebtoken') // Token for later
 
+////////SEED ROUTE
+// router.get('/seed', (req,res) => {
+//     Element.create([
+//       {
+//       "atomicMass": "1.00794(4)",
+//       "atomicNumber": 1,
+//       "atomicRadius": 37,
+//       "boilingPoint": 20,
+//       "bondingType": "diatomic",
+//       "cpkHexColor": "FFFFFF",
+//       "density": 0.0000899,
+//       "electronAffinity": -73,
+//       "electronegativity": 2.2,
+//       "electronicConfiguration": "1s1",
+//       "groupBlock": "nonmetal",
+//       "ionRadius": "",
+//       "ionizationEnergy": 1312,
+//       "meltingPoint": 14,
+//       "name": "Hydrogen",
+//       "oxidationStates": "-1, 1",
+//       "standardState": "gas",
+//       "symbol": "H",
+//       "vanDelWaalsRadius": 120,
+//       "yearDiscovered": 1766
+//       },
+//       {
+//       "atomicMass": "4.002602(2)",
+//       "atomicNumber": 2,
+//       "atomicRadius": 32,
+//       "boilingPoint": 4,
+//       "bondingType": "atomic",
+//       "cpkHexColor": "D9FFFF",
+//       "density": 0.0001785,
+//       "electronAffinity": 0,
+//       "electronegativity": "",
+//       "electronicConfiguration": "1s2",
+//       "groupBlock": "noble gas",
+//       "ionRadius": "",
+//       "ionizationEnergy": 2372,
+//       "meltingPoint": "",
+//       "name": "Helium",
+//       "oxidationStates": "",
+//       "standardState": "gas",
+//       "symbol": "He",
+//       "vanDelWaalsRadius": 140,
+//       "yearDiscovered": 1868
+//       }
+//     ], (error, newElements) => {
+//         res.redirect('/elements')
+//     })
+//   })
+  
+
 // // ANDY Auth Middleware
 // const auth = (req, res, next) => {
 //     try {
