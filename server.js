@@ -70,6 +70,13 @@ axios.get('https://neelpatel05.pythonanywhere.com/')
     elements = backupElements
   })
 
+const resetDatabase = () => {
+    mongoose.connection.collections['elements'].drop( function(err) {
+      console.log('elements dropped');
+    });
+  }
+// resetDatabase()
+
 // // AUTH CONFIG
 // const authConfig = {
 //     domain: "ariecker.us.auth0.com",
