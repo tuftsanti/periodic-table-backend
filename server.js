@@ -19,7 +19,8 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/'
 // Whitelist localhost
 const whitelist = [
   'http://localhost:8080',
-  'http://localhost:8000'
+  'http://localhost:8000',
+  'https://andys-periodic-table.herokuapp.com/'
 ]
 
 // CORS middleware
