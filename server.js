@@ -59,7 +59,7 @@ let elements = []
 let forSeed = []
 // console.log(`Elements is: ${typeof(elements)}`)
 // axios.get('https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json')
-axios.get('https://neelpatel05.pythonanywhere.com/xx')
+axios.get('https://neelpatel05.pythonanywhere.com/')
   .then(({data}) => {
     // elements = Object.values(data.elements)
     elements = data
