@@ -70,20 +70,22 @@ axios.get('https://neelpatel05.pythonanywhere.com/')
     // console.log(`Elements is: ${typeof(elements)}`)
     // elements = data.map(element => element)
     // var sorted = elements.sort((a, b) => { return a.name - b.name; });
-    function sortAlphaNum(a,b) {
-      let regexAlpha = /[^a-zA-Z]/g;
-      let regexNumber = /[^0-9]/g;
-      let aA = a.name.replace(regexAlpha, "");
-      let bA = b.name.replace(regexAlpha, "");
-      if (aA === bA) {
-          let aN = parseInt(a.name.replace(regexNumber, ""), 10);
-          let bN = parseInt(b.name.replace(regexNumber, ""), 10);
-          return aN === bN ? 0 : aN > bN ? 1 : -1;
-      } else {
-          return aA > bA ? 1 : -1;
-      }
-    }
-    const sorted = elements.sort(sortAlphaNum)
+    // function sortAlphaNum(a,b) {
+    //   let regexAlpha = /[^a-zA-Z]/g;
+    //   let regexNumber = /[^0-9]/g;
+    //   let aA = a.name.replace(regexAlpha, "");
+    //   let bA = b.name.replace(regexAlpha, "");
+    //   if (aA === bA) {
+    //       let aN = parseInt(a.name.replace(regexNumber, ""), 10);
+    //       let bN = parseInt(b.name.replace(regexNumber, ""), 10);
+    //       return aN === bN ? 0 : aN > bN ? 1 : -1;
+    //   } else {
+    //       return aA > bA ? 1 : -1;
+    //   }
+    // }
+    // const sorted = elements.sort(sortAlphaNum)
+
+    const sorted = elements
     db.collections['elements'].drop( function(err) {
       console.log('elements dropped');
     });
